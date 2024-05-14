@@ -33,11 +33,12 @@ const withAuth = (WrappedComponent) => {
     }, []); // Run only once on component mount
 
     if (!isLoggedIn) {
-      return null; // Or any other component to render while authentication is in progress
+      return null; // Or any other component to render while authentication is in 
     }
 
     return <WrappedComponent {...props} />;
   };
 };
+withAuth.displayName = 'withAuth';
 
 export default withAuth;
