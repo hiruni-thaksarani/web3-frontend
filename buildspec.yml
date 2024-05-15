@@ -16,4 +16,4 @@ phases:
       - echo "Updating Project to S3..."
       - aws s3 sync out/ s3://w3g-frontend-bucket --delete
 
-# Update Build inside of the AWS S33
+# Update Build inside of the AWS S33it 
