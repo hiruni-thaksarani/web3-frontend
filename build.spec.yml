@@ -1,10 +1,21 @@
-version: 0.2
-phases:
-  install:
-    - npm install
-  build:
-   - npm run build
-artifacts:
-  files:
-    -'**/**'
-  base-directory: '.next'
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/w3g-project/web3-frontend
+hooks:
+  #  ApplicationStop:
+  #  DownloadBundle:
+  #  BeforeInstall:
+  #  Install:
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/application_start.sh
+      timeout: 300
+      runas: root
+#  ValidateService:
+#abcc
+
