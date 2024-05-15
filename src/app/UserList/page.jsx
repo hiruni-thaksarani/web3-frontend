@@ -59,7 +59,7 @@ export default function UserList() {
   const [originalEmail, setOriginalEmail] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [errorAlertContent, setErrorAlertContent] = useState(""); // State for error alert message
-
+  const baseUrl=process.env.NEXT_PUBLIC_BASE_URL;
 
 
   const [darkBackground, setDarkBackground] = useState(false); // state for controlling dark background
@@ -78,7 +78,7 @@ export default function UserList() {
   }
 
   try {
-    const response = await axios.get("http://localhost:4000/users/getUsers", {
+    const response = await axios.get(`$(baseUrl)/users/getUsers`, {
       headers: {
         Authorization: token,
       },
@@ -126,7 +126,7 @@ export default function UserList() {
   const confirmDelete = async () => {
     try {
       await axios.patch(
-        `http://localhost:4000/users/deactivate/${selectedUserEmail}`
+        `$(baseUrl)/users/deactivate/${selectedUserEmail}`
       );
       fetchUsers();
     
@@ -239,7 +239,7 @@ const handleEditSubmit = async (e) => {
   const confirmEdit = async () => {
     try {
       await axios.patch(
-        `http://localhost:4000/users/${originalEmail}`,
+        `$(baseUrl)/users/${originalEmail}`,
         editedUser
       );
       fetchUsers();
