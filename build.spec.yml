@@ -1,0 +1,10 @@
+version: 0.2
+phases:
+  install:
+    - npm install
+  build:
+   - npm run build
+artifacts:
+  files:
+    -'**/**'
+  base-directory: '.next'
