@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
 import { IconAlertCircle, IconCircleCheck } from "@tabler/icons-react";
-import { request } from "http";
-import { useParams } from "next/navigation";
 
 // Alert component to display messages
 const Alert = ({ type, content, onClose }) => {
@@ -44,8 +42,8 @@ const Alert = ({ type, content, onClose }) => {
 export default function UserOnboarding() {
   const [showUpdateConfirmation, setShowUpdateConfirmation] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [existingEmails, setExistingEmails] = useState([]);
-  const params = useParams<{tag:string,item:string}>();
+  // const [existingEmails, setExistingEmails] = useState([]);
+  // const params = useParams<{tag:string,item:string}>();
   
 
   useEffect(() => {
@@ -246,7 +244,6 @@ export default function UserOnboarding() {
     }
   };
 
-  console.log(params);
 
   return (
     <div className="">
