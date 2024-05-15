@@ -5,6 +5,14 @@ import axios from "axios";
 import UserOnboarding from "../UserOnBoarding/page";
 import { redirect } from "next/navigation";
 
+// export async function generateStaticParams() {
+//   // Return an array of objects, each containing the dynamic parameter value
+//   return [
+//     { params: { isLoggedIn: 'true' } },
+//     { params: { isLoggedIn: 'false' } },
+//   ];
+// }
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,7 +45,7 @@ export default function Login() {
 
   useEffect(()=>{
     if(isLoggedIn){
-      redirect(`/UserOnBoarding/${isLoggedIn}`)
+      redirect("/UserOnBoarding/")
     }
   },[isLoggedIn])
 
