@@ -16,4 +16,4 @@ phases:
       - echo "Updating Project to S3..."
       - aws s3 sync build/ s3://nftl-client-dashboard --delete
 
-# Update Build inside of the AWS S33
+# Update Build inside of the AWS S3
