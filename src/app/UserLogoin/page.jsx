@@ -18,11 +18,12 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const baseUrl=process.env.NEXT_PUBLIC_BASE_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4000/users/login", {
+      const response = await axios.post(`$(baseUrl)/users/login`, {
         email,
         password,
       });

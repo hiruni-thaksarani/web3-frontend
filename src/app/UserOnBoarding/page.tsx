@@ -42,6 +42,8 @@ const Alert = ({ type, content, onClose }) => {
 export default function UserOnboarding() {
   const [showUpdateConfirmation, setShowUpdateConfirmation] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const baseUrl=process.env.NEXT_PUBLIC_BASE_URL;
+
   // const [existingEmails, setExistingEmails] = useState([]);
   // const params = useParams<{tag:string,item:string}>();
   
@@ -76,8 +78,6 @@ export default function UserOnboarding() {
     type: "",
     content: "",
   });
-
-  
 
   const nameRegex = /^[a-zA-Z\s']*$/;
   const mobileRegex = /^[0-9]{1,15}$/;
@@ -198,7 +198,7 @@ export default function UserOnboarding() {
     setShowUpdateConfirmation(false); // Close the confirmation dialog
     try {
       const response = await axios.post(
-        "http://localhost:4000/users/sign-up",
+        `$(baseUrl)/users/sign-up`,
         formData
       );
 
