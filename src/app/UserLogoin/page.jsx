@@ -23,7 +23,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`$(baseUrl)/users/login`, {
+      const response = await axios.post(`${baseUrl}/users/login`, {
         email,
         password,
       });

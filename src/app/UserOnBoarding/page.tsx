@@ -198,7 +198,7 @@ export default function UserOnboarding() {
     setShowUpdateConfirmation(false); // Close the confirmation dialog
     try {
       const response = await axios.post(
-        `$(baseUrl)/users/sign-up`,
+        `${baseUrl}/users/sign-up`,
         formData
       );
 
