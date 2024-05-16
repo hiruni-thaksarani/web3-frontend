@@ -56,6 +56,7 @@ export default function UserList() {
   const [showAlertDelete, setShowAlertDelete] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false); // State for showing the confirmation box
   const [showAConfirmAlert, setShowConfirmAlert] = useState(false); // State for showing the confirmation box
+  const [showDConfirmAlert, setShowDeleteConfirmAlert] = useState(false); 
   const [originalEmail, setOriginalEmail] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [errorAlertContent, setErrorAlertContent] = useState(""); // State for error alert message
@@ -128,9 +129,9 @@ export default function UserList() {
       await axios.patch(
         `${baseUrl}/users/deactivate/${selectedUserEmail}`
       );
+      setShowDeleteConfirmAlert(true);
       fetchUsers();
-    
-      setShowDeleteAlert(true);
+      // setShowAlertDelete(true);
     } catch (error) {
       console.error("Error deactivating user:", error);
     }
@@ -300,6 +301,11 @@ const handleEditSubmit = async (e) => {
 
     }
   };
+
+  const [message, setMessage] = useState({
+    type: "",
+    content: "",
+  });
   
 
   useEffect(() => {
@@ -607,8 +613,9 @@ const handleEditSubmit = async (e) => {
               <div>
                 <button
                   onClick={() => {
-                    setShowAlert(false); // Close the alert
-                    setShowDeleteConfirmation(false); // Close the confirmation box
+                    
+                    setShowAlert(true); // Close the alert
+                    showDeleteConfirmation(false); // Close the confirmation box
                   }}
                   className="inline-flex items-center mr-1 ml-16 text-sm font-bold rounded-lg border border-transparent text-black"
                 >
@@ -681,6 +688,63 @@ const handleEditSubmit = async (e) => {
           </div>
         </div>
       )}
+
+{showAConfirmAlert && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-40">
+          <div className="bg-green-100 p-5 rounded-md w-[500px] mb-[770px] h-[65px]">
+            <div className="flex items-center ">
+              <div className="mr-2">
+                <IconCircleCheck className="text-green-700" />
+              </div>
+              <div className="mr-2">
+                <p className="text-sm mr-16 ">
+                  User has been updated successfully.
+                </p>
+              </div>
+              <div>
+                <button
+                  onClick={() => {
+                    setShowConfirmAlert(false);
+                    setShowConfirmation(false);
+                    setShowEditForm(false);
+                  }}
+                  className="inline-flex items-center mr-1 ml-16 text-sm font-bold rounded-lg border border-transparent text-black"
+                >
+                  X
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      )}{showDConfirmAlert && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-40">
+          <div className="bg-green-100 p-5 rounded-md w-[500px] mb-[770px] h-[65px]">
+            <div className="flex items-center ">
+              <div className="mr-2">
+                <IconCircleCheck className="text-green-700" />
+              </div>
+              <div className="mr-2">
+                <p className="text-sm mr-16 ">
+                  User has been deleted successfully.
+                </p>
+              </div>
+              <div>
+                <button
+                  onClick={() => {
+                    setShowDeleteConfirmation(false);
+                    setShowDeleteConfirmAlert(false);
+                  }}
+                  className="inline-flex items-center mr-1 ml-16 text-sm font-bold rounded-lg border border-transparent text-black"
+                >
+                  X
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* {showSuccessMessage && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
         {showAlertDelete && (
