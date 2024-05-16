@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import UserOnboarding from "../UserOnBoarding/page";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ export default function Login() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const router=useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +42,7 @@ export default function Login() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      // No timer for redirect
+     
     }
   }, [isLoggedIn]);
 
@@ -56,7 +58,8 @@ export default function Login() {
               <button
                 onClick={() => {
                   setShowSuccessMessage(false);
-                  window.location.href = '/UserOnBoarding';
+                  router.push('/UserOnBoarding');
+                  // window.location.href = '/UserOnBoarding';
                 }}
                 className="ml-auto"
               >
