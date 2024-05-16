@@ -239,11 +239,7 @@ const handleEditSubmit = async (e) => {
   const confirmEdit = async () => {
     try {
       await axios.patch(
-<<<<<<< HEAD
         `${baseUrl}/users/${originalEmail}`,
-=======
-        `$(\{baseUrl}/users/${originalEmail}`,
->>>>>>> 0c363f653b68291a661978ca3f7196d51f25dc55
         editedUser
       );
       fetchUsers();
