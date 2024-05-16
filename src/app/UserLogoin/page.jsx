@@ -56,7 +56,7 @@ export default function Login() {
               <button
                 onClick={() => {
                   setShowSuccessMessage(false);
-                  redirect(`/UserOnBoarding/${isLoggedIn}`)
+                  window.location.href = '/UserOnBoarding';
                 }}
                 className="ml-auto"
               >
