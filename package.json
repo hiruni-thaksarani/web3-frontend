@@ -4,11 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-<<<<<<< HEAD
     "build": "next build",
-=======
-     "build": "next build",
->>>>>>> 411ed3935a2b096b51b228ec991a9b43f88e8062
     "export":"next export",
     "start": "next start",
     "lint": "next lint"
