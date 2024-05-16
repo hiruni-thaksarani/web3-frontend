@@ -78,7 +78,7 @@ export default function UserList() {
   }
 
   try {
-    const response = await axios.get(`$(baseUrl)/users/getUsers`, {
+    const response = await axios.get(`${baseUrl}/users/getUsers`, {
       headers: {
         Authorization: token,
       },
@@ -239,7 +239,7 @@ const handleEditSubmit = async (e) => {
   const confirmEdit = async () => {
     try {
       await axios.patch(
-        `$(baseUrl)/users/${originalEmail}`,
+        `$(\{baseUrl}/users/${originalEmail}`,
         editedUser
       );
       fetchUsers();
