@@ -14,6 +14,14 @@ phases:
   post_build:
     commands:
       - echo "Updating Project to S3..."
+<<<<<<< HEAD
       - aws s3 sync out/ s3://w3g-frontend-bucket --delete
 
 # Update Build inside of the AWS S33it 
+=======
+      - aws s3 sync out/ s3://w3g-frontend-bucket --delete 
+
+# Update Build inside of the AWS S3
+    
+
+>>>>>>> 0c363f653b68291a661978ca3f7196d51f25dc55
