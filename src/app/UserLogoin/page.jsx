@@ -12,18 +12,48 @@ export default function Login() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router=useRouter();
+  const [userType, setUserType] = useState("");
+  const [fcmToken1,setFcmToken]=useState("");
+
+  useEffect(() => {
+    const fcmToken = localStorage.getItem('fcmToken')
+    setFcmToken(fcmToken)
+  }, []);
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
     try {
       const response = await axios.post(`${baseUrl}/users/login`, {
-        email,
-        password,
+        email:email,
+        password:password,
+        fcmToken:fcmToken1
       });
+
+      console.log("response",response);
+      console.log("user type - ",response.data.user._id);
+      console.log("response   ",response);
+      console.log("fcm- ",response.data.user.fcmToken);
+
       const token = response.headers["authorization"];
+
       localStorage.setItem("token", token);
+      localStorage.setItem("user_type", response.data.user.type);
+
+      setUserType(userType);
+
       setIsLoggedIn(true);
       setShowSuccessMessage(true);
+
+      //Update FCM token after successful login
+      // const fcmToken = localStorage.getItem("fcmToken");
+      // if (fcmToken) {
+      //   await axios.post(
+      //     `${baseUrl}/users/update-fcm-token`,
+      //     { fcmToken },
+      //   );
+      // }
+
     } catch (error) {
       console.error("Login error:", error);
       if (

@@ -27,7 +27,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "home/FcmTokenComp.js", "src/utils/hooks/useFCMToken.js", "src/firebase.js"  ],
   "exclude": [
     "node_modules"
   ]

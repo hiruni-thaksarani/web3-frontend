@@ -2,7 +2,6 @@ import Link from "next/link";
 import logo from "./w3g-logo3.png";
 import Image from "next/image";
 
-
 export default function Navbar() {
   const handleLogout = () => {
     // Delete token from storage
@@ -12,7 +11,9 @@ export default function Navbar() {
   };
 
   return (
+    
     <header className={`z-10 fixed top-0 left-0 right-0  flex items-center justify-between h-24 py-2 px-10 bg-mainColor`}>
+      
 
         <div className='ml-4'>
         {/* <img src={logo}

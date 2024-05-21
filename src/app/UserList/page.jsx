@@ -52,6 +52,7 @@ export default function UserList() {
   const [editedUser, setEditedUser] = useState(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedUserEmail, setSelectedUserEmail] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showAlertDelete, setShowAlertDelete] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false); // State for showing the confirmation box
@@ -61,7 +62,16 @@ export default function UserList() {
   const [showAlert, setShowAlert] = useState(false);
   const [errorAlertContent, setErrorAlertContent] = useState(""); // State for error alert message
   const baseUrl=process.env.NEXT_PUBLIC_BASE_URL;
+  const [fcmToken1, setFcmToken] = useState('');
 
+
+  useEffect(() => {
+      const fetchFcmToken = async () => {
+          const FCM = localStorage.getItem('fcmToken');
+        setFcmToken(FCM);
+      };
+      fetchFcmToken();
+    }, []);
 
   const [darkBackground, setDarkBackground] = useState(false); // state for controlling dark background
 
@@ -119,8 +129,9 @@ export default function UserList() {
     setOriginalEmail(originalEmail);
   };
 
-  const handleDelete = (userEmail) => {
+  const handleDelete = (userEmail,userId) => {
     setSelectedUserEmail(userEmail);
+    setSelectedUserId(userId);
     setShowDeleteConfirmation(true);
   };
 
@@ -131,6 +142,24 @@ export default function UserList() {
       );
       setShowDeleteConfirmAlert(true);
       fetchUsers();
+      console.log("User Id - "+selectedUserId);
+      console.log("Fcm Token - "+fcmToken1);
+
+          const notificationResponse = await axios.post(`${baseUrl}/notifications/send`, {
+            // userId:selectedUserId.toString(),
+            // token:fcmToken1,
+            userId:"6649c31061ac5b0f0a4ad512",
+            token:"eh0qSX70YStXRHYhMi-a3Q:APA91bFltpksj8YyoTQGy5IS04bJ0OtPeoGej0PYRT4K5MTOfvVCJWRmloRWGw5OmYS9DjPUydj1R6x6bFL2oer1ngZHGwf7fY9hGGWF0ZZ554gmEzAaKDyM-AixrhC39E1GFxyQDC5L",
+          });
+
+          if (notificationResponse.status === 201) {
+            console.log('Notification sent successfully');
+            console.log(notificationResponse);
+          } else {
+            console.error('Failed to send notification');
+            console.log(notificationResponse);
+          }
+
       // setShowAlertDelete(true);
     } catch (error) {
       console.error("Error deactivating user:", error);
@@ -230,10 +259,6 @@ const handleEditSubmit = async (e) => {
 
 
     setShowConfirmation(true); 
-
-    // Other validations...
-
-    // If all validations pass, proceed with update
   };
   
 
@@ -296,8 +321,6 @@ const handleEditSubmit = async (e) => {
         setShowConfirmation(false); 
         return;
       }
-
-
 
     }
   };
@@ -390,7 +413,7 @@ const handleEditSubmit = async (e) => {
                           />
                           <IconCircleLetterX
                             onClick={() =>
-                              handleDelete(user.contact_info.email)
+                              handleDelete(user.contact_info.email,user._id)
                             }
                             className="cursor-pointer text-red-500 ml-3"
                           />
@@ -745,36 +768,6 @@ const handleEditSubmit = async (e) => {
         </div>
       )}
 
-      {/* {showSuccessMessage && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        {showAlertDelete && (
-            <div className="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3 z-50  h-20 w-1/2" role="alert">
-
-              <p className="font-bold">Message</p>
-              <p className="text-sm">User deleted successfully.</p>
-              <button
-                onClick={() => setShowDeleteConfirmation(false)}
-                className="absolute top-0 right-0 mr-96 mt-3 text-sm text-blue-700 focus:outline-none"
-              >
-                Close
-              </button>
-            </div>
-          )}
-
-          <div className="bg-white p-8 rounded-md w-[400px]">
-            <h2 className="text-lg font-semibold mb-4">Success</h2>
-            <p>User successfully deleted.</p>
-            <div className="flex justify-end mt-4">
-              <button
-                onClick={() => setShowSuccessMessage(false)}
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-              >
-                OK
-              </button>
-            </div>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 }
