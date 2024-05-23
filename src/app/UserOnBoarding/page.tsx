@@ -4,11 +4,12 @@ import axios from "axios";
 import Navbar from "../../components/Navbar";
 import { IconAlertCircle, IconCircleCheck } from "@tabler/icons-react";
 import FcmTokenComp from "../../utils/hooks/firebaseForeground";
+import PageLoading from "../../components/PageLoading";
 
 // Alert component to display messages
 const Alert = ({ type, content, onClose }) => {
   return (
-    <div className="fixed inset-0 z-50 flex justify-center items-center mb-[800px]">
+    <div className="fixed inset-0 z-50 flex justify-center items-center mb-[800px] mt-10">
       <div
         className={`bg-${type === "success" ? "green" : "red"}-100 border-${
           type === "success" ? "green" : "red"
@@ -45,6 +46,7 @@ export default function UserOnboarding() {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const [fcmToken1, setFcmToken] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // const [existingEmails, setExistingEmails] = useState([]);
   // const params = useParams<{tag:string,item:string}>();
@@ -221,16 +223,16 @@ export default function UserOnboarding() {
   };
 
   const handleConfirmation = async () => {
-    setShowUpdateConfirmation(true); // Close the confirmation dialog
+    setShowUpdateConfirmation(false); // Close the confirmation dialog
     console.log(formData);
     try {
-      const response = await axios.post(`${baseUrl}/users/sign-up`, formData);
+      setIsLoading(true);
 
+      const response = await axios.post(`${baseUrl}/users/sign-up`, formData);
       setMessage({
         type: "success",
         content: "User successfully added to the system",
       });
-
     } catch (error) {
       console.error("Error creating user:", error);
       console.log(error.response.data.message);
@@ -272,6 +274,8 @@ export default function UserOnboarding() {
         setShowUpdateConfirmation(false);
         return;
       }
+    } finally {
+      setIsLoading(false);
     }
   };
   const userType = localStorage.getItem("user_type");
@@ -281,22 +285,22 @@ export default function UserOnboarding() {
       return (
         <div className="">
           <Navbar />
-        
+
           <FcmTokenComp />
           <div className="mb-10 py-10 px-0 w-full ">
-              <div className="flex flex-col mt-32 ml-20 mr-20 border border-gray-300 shadow-md">
-                <div className="text-3xl ml-5 font-semibold mb-5 mt-10 ml-10">
-                  User Details
-                </div>
-                </div>
+            <div className="flex flex-col mt-32 ml-20 mr-20 border border-gray-300 shadow-md">
+              <div className="text-3xl ml-5 font-semibold mb-5 mt-10 ml-10">
+                User Details
               </div>
-              
+            </div>
           </div>
+        </div>
       );
     } else if (userType === "ADMIN") {
       return (
         <div className="">
           <Navbar />
+          {isLoading && <PageLoading />}
           {message.content && (
             <Alert
               type={message.type}
@@ -368,10 +372,10 @@ export default function UserOnboarding() {
             </div>
           )}
 
-          <div className="mb-10 py-10 px-0 w-full ">
-            <form className="max-w-screen-full ml-1 " onSubmit={handleSubmit}>
-              <div className="flex flex-col mt-32 ml-20 mr-20 border border-gray-300 shadow-md">
-                <div className="text-3xl ml-5 font-semibold mb-5 mt-10 ml-10">
+          <div className="mb-10 py-10  ">
+            <form className="max-w-screen-full min-w-screen-full ml-1 " onSubmit={handleSubmit}>
+              <div className="flex flex-col mt-32 ml-10 mr-10 border border-gray-300 shadow-md ">
+                <div className="text-2xl ml-5 font-semibold mb-5 mt-10 ml-10 md:text-3xl">
                   User Onboarding
                 </div>
                 <div className="text-lg ml-10 mb-10">
@@ -385,7 +389,7 @@ export default function UserOnboarding() {
                       </label>
                       <input type="hidden" value="USER" name="type" />
                       <input type="hidden" value="ONBOARD" name="status" />
-                      <div className="w-full grid grid-cols-3 gap-x-16">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-x-16">
                         <input
                           className="text-gray-700 border border-gray-400 rounded py-3 px-6 mb-3 leading-tight focus:outline-none focus:bg-white"
                           id="grid-first-name"
@@ -441,7 +445,7 @@ export default function UserOnboarding() {
                           placeholder="Date of birth"
                         />
                         <select
-                          className="w-full md:w-auto border border-gray-400 rounded py-3 px-6 mb-3 leading-tight focus:outline-none focus:bg-white text-gray-700 pr-8"
+                          className="w-full md:w-auto text-gray-700 border border-gray-400 rounded py-3 px-6 mb-3 leading-tight focus:outline-none focus:bg-white"
                           id="grid-gender"
                           name="gender"
                           data-nested="basic_info"
@@ -456,7 +460,7 @@ export default function UserOnboarding() {
                             })
                           }
                         >
-                          <option value="" disabled className="text-gray-700">
+                          <option value="" disabled className="text-gray-700 ">
                             Gender
                           </option>
                           <option value="MALE">MALE</option>
@@ -467,11 +471,11 @@ export default function UserOnboarding() {
                   </div>
 
                   <div className="flex flex-wrap mb-10 px-10">
-                    <div className="w-full mb-10 md:mb-0">
+                    <div className="w-full mb-6 md:mb-0">
                       <label className="block text-gray-700 text-lg font-semibold mb-2">
                         Contact Details
                       </label>
-                      <div className="w-full grid grid-cols-3 gap-x-16">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-x-16">
                         <input
                           className="w-full md:w-auto text-gray-700 border border-gray-400 rounded py-3 px-6 mb-3 leading-tight focus:outline-none focus:bg-white"
                           id="grid-email"
@@ -508,41 +512,42 @@ export default function UserOnboarding() {
                           placeholder="Password"
                         />
 
+
                         {formData.contact_info.mobile_numbers.map(
                           (number, index) => (
                             <div key={index} className="flex items-center mb-3">
-                              <div className="flex-grow">
+                              <div className="flex-grow flex items-center">
                                 <input
-                                  className="w-[378px] text-gray-700 border border-gray-400 rounded py-3 px-6 leading-tight focus:outline-none focus:bg-white"
+                                  className="w-full text-gray-700 border border-gray-400 rounded py-3 px-6 leading-tight focus:outline-none focus:bg-white"
                                   type="text"
                                   name={`mobile_number_${index}`}
                                   value={number}
                                   onChange={(e) => handleChange(e, index)}
                                   placeholder="Mobile Number"
                                 />
-                              </div>
-                              {index === 0 && (
-                                <button
-                                  type="button"
-                                  className="inline-flex items-center font-light rounded-lg bg-white text-3xl px-2"
-                                  onClick={handleAddMobileField}
-                                >
-                                  +
-                                </button>
-                              )}
-                              {index > 0 && (
-                                <div className="inline-flex items-center ml-0">
+                                {index === 0 && (
                                   <button
                                     type="button"
-                                    className="font-light rounded-lg bg-white text-3xl px-3"
-                                    onClick={() =>
-                                      handleRemoveMobileField(index)
-                                    }
+                                    className="absolute right-[50px] inline-flex font-light rounded-lg bg-white text-3xl "
+                                    onClick={handleAddMobileField}
                                   >
-                                    -
+                                    +
                                   </button>
-                                </div>
-                              )}
+                                )}
+                                {index > 0 && (
+                                  <div className="inline-flex items-center ml-0">
+                                    <button
+                                      type="button"
+                                      className="absolute ml-3 font-light rounded-lg bg-white text-3xl "
+                                      onClick={() =>
+                                        handleRemoveMobileField(index)
+                                      }
+                                    >
+                                      -
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           )
                         )}
@@ -550,21 +555,21 @@ export default function UserOnboarding() {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="mt-10 ml-36 flex gap-x-10 justify-end mr-20">
-                <button
-                  type="button"
-                  className="py-3 px-16 inline-flex items-center gap-x-2 text-m font-semibold rounded-lg border border-mainColor bg-white text-mainColor hover:bg-blue-100 focus:border-mainColor focus:outline-none active:border-mainColor active:outline-none"
-                  onClick={clearForm}
-                >
-                  Clear
-                </button>
-                <button
-                  type="submit"
-                  className="py-3 px-16 inline-flex items-center gap-x-2 text-m font-semibold rounded-lg border border-transparent bg-mainColor text-white hover:bg-lightColor focus:border-transparent focus:outline-none active:border-transparent active:outline-none"
-                >
-                  Save
-                </button>
+                <div className="mt-3  ml-5 mr-5 md:ml-36 md:mr-16 flex flex-col md:flex-row gap-y-4 md:gap-x-10 justify-end mb-10">
+                  <button
+                    type="button"
+                    className="w-full ms:w-[150px] md:w-[200px]  py-2 px-4 md:py-3 md:px-6 inline-flex items-center justify-center gap-x-2 text-sm md:text-base font-semibold rounded-lg border border-mainColor bg-white text-mainColor hover:bg-blue-100 focus:border-mainColor focus:outline-none active:border-mainColor active:outline-none"
+                    onClick={clearForm}
+                  >
+                    Clear
+                  </button>
+                  <button
+                    type="submit"
+                    className="w-full md:w-[200px] py-2 px-4 md:py-3 md:px-6 inline-flex items-center justify-center gap-x-2 text-sm md:text-base font-semibold rounded-lg border border-transparent bg-mainColor text-white hover:bg-lightColor focus:border-transparent focus:outline-none active:border-transparent active:outline-none"
+                  >
+                    Save
+                  </button>
+                </div>
               </div>
             </form>
           </div>

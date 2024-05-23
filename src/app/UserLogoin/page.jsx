@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import UserOnboarding from "../UserOnBoarding/page";
 import { useRouter } from "next/navigation";
+import PageLoading from "../../components/PageLoading";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -14,6 +15,7 @@ export default function Login() {
   const router=useRouter();
   const [userType, setUserType] = useState("");
   const [fcmToken1,setFcmToken]=useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fcmToken = localStorage.getItem('fcmToken')
@@ -24,20 +26,20 @@ export default function Login() {
 
     e.preventDefault();
     try {
+      setIsLoading(true);
       const response = await axios.post(`${baseUrl}/users/login`, {
         email:email,
         password:password,
         fcmToken:fcmToken1
       });
 
-      console.log("response",response);
+      console.log("response",response.headers.accesstoken);
       console.log("user type - ",response.data.user._id);
       console.log("response   ",response);
       console.log("fcm- ",response.data.user.fcmToken);
 
-      const token = response.headers["authorization"];
-
-      localStorage.setItem("token", token);
+      
+      localStorage.setItem("token", response.headers.accesstoken);
       localStorage.setItem("user_type", response.data.user.type);
 
       setUserType(userType);
@@ -67,6 +69,8 @@ export default function Login() {
           "An error occurred. Please enter valid email and password."
         );
       }
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -77,11 +81,12 @@ export default function Login() {
   }, [isLoggedIn]);
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center p-10">
       <div className="w-full max-w-xl mt-32">
+      {isLoading && <PageLoading />}
         {showSuccessMessage && (
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 bg-green-100 p-5 rounded-md w-[500px]">
-            <div className="flex items-center justify-center">
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 bg-green-100 p-5 rounded-md w-[450px] mt-5 ">
+            <div className="flex items-center justify-center ">
               <div className="mr-2">
                 <p className="text-green-700">User has been logged successfully.</p>
               </div>
@@ -99,7 +104,7 @@ export default function Login() {
           </div>
         )}
       </div>
-      <div className="w-full max-w-xl bg-white shadow-md border border-mainColor rounded pb-8 mb-4">
+      <div className="w-full max-w-xl  bg-white shadow-md border border-mainColor rounded pb-8 ">
         <div className="bg-mainColor px-10 py-2"></div>
         <h1 className="text-2xl mt-10 font-bold mb-4 text-center">Login</h1>
         <p className="text-gray-700 text-base mb-4 px-10">
